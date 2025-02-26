@@ -5,6 +5,7 @@
 ## Overview
 
 This project demonstrates a CI/CD pipeline for deploying the **MyHealth WebApp**(https://github.com/piyushsachdeva/MyHealthClinic-AKS) to **Azure Kubernetes Service (AKS)** using **Azure DevOps**. The pipeline automates infrastructure provisioning, application deployment, and Kubernetes service exposure.
+![Image Description](https://github.com/abhinav059/Images/blob/main/Screenshot%202025-02-27%20at%201.04.24%20AM.png)
 
 ## **1. Pre-requisites**
 
