@@ -17,6 +17,8 @@ a
 - **Azure Subscription** with access to create resources
 
 ## **2. Infrastructure Provisioning**
+![Image Description]([https://github.com/yourusername/your-repo/blob/main/path-to-image.png](https://github.com/abhinav059/Images/blob/main/01.37.jpeg))
+
 
 Use the following script to create the necessary infrastructure in **Azure**.
 
@@ -41,7 +43,8 @@ az aks create --resource-group $RESOURCE_GROUP --name $AKS_CLUSTER --node-count 
 az sql server create --name $SQL_SERVER --resource-group $RESOURCE_GROUP --location eastus --admin-user adminuser --admin-password MySecurePassword123!
 az sql db create --resource-group $RESOURCE_GROUP --server $SQL_SERVER --name $SQL_DB --service-objective S0
 ```
-
+**![Image Description](https://github.com/abhinav059/Images/blob/main/09.jpeg)
+**
 ## **3. Initializing the Azure DevOps Pipeline**
 
 Add the following **Azure DevOps Pipeline YAML file** to your repository (`azure-pipelines.yml`).
