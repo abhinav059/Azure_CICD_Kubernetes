@@ -141,8 +141,13 @@ steps:
     ArtifactName: deploy
 
 ```
+**![Image Description](https://github.com/abhinav059/Images/blob/main/89.jpeg)
+
 
 ## **4. Preparing Docker Files**
+**![Image Description](https://github.com/abhinav059/Images/blob/main/22.jpeg)
+**![Image Description](https://github.com/abhinav059/Images/blob/main/33.jpeg)
+
 
 ### **docker-compose.yml**
 
@@ -184,6 +189,7 @@ az acr login --name $ACR_NAME
 docker build -t $ACR_NAME.azurecr.io/myhealth.web:latest .
 docker push $ACR_NAME.azurecr.io/myhealth.web:latest
 ```
+**![Image Description](https://github.com/abhinav059/Images/blob/main/55.jpeg)
 
 ## **6. Deploying to AKS**
 
@@ -220,6 +226,9 @@ kubectl apply -f mhc-aks.yaml
 ## **7. Verifying Deployment in AKS**
 
 Connect to the AKS cluster and check running services.
+**![Image Description](https://github.com/abhinav059/Images/blob/main/66.jpeg)
+
+or
 
 ```bash
 az aks get-credentials --resource-group $RESOURCE_GROUP --name $AKS_CLUSTER
@@ -229,6 +238,8 @@ kubectl describe pod <pod-name>
 ```
 
 ## **8. Exposing the Application**
+**![Image Description](https://github.com/abhinav059/Images/blob/main/77.jpeg)
+
 
 Expose the frontend service using a Load Balancer:
 
@@ -241,6 +252,7 @@ Check the external IP:
 ```bash
 kubectl get service myhealth-service
 ```
+**![Image Description](https://github.com/abhinav059/Images/blob/main/88.jpeg)
 
 ## **9. Setting Up a Release Pipeline**
 
@@ -249,18 +261,7 @@ kubectl get service myhealth-service
 3. Add a **Deploy to Kubernetes** task and select the AKS cluster.
 4. Deploy the artifacts (`docker-compose.yml`, `mhc-aks.yaml`).
 
-## **10. GitHub Repository Setup**
 
-To publish this project on GitHub:
-
-```bash
-git init
-git add .
-git commit -m "Initial Commit"
-git branch -M main
-git remote add origin https://github.com/yourusername/myhealth-devops.git
-git push -u origin main
-```
 
 ## **Conclusion**
 
