@@ -17,7 +17,7 @@ a
 - **Azure Subscription** with access to create resources
 
 ## **2. Infrastructure Provisioning**
-![Image Description](https://github.com/yourusername/your-repo/blob/main/path-to-image.png](https://github.com/abhinav059/Images/blob/main/01.37.jpeg)
+![Image Description](https://github.com/abhinav059/Images/blob/main/01.37.jpeg)
 
 
 Use the following script to create the necessary infrastructure in **Azure**.
