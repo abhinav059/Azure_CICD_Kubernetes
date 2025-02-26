@@ -47,6 +47,8 @@ az sql db create --resource-group $RESOURCE_GROUP --server $SQL_SERVER --name $S
 Add the following **Azure DevOps Pipeline YAML file** to your repository (`azure-pipelines.yml`).
 
 ```yaml
+# Azure DevOps Pipeline for Deploying a Web App to Kubernetes (AKS)
+
 trigger:
 - main
 
@@ -61,21 +63,80 @@ steps:
     targetFiles: 'appsettings.json'
     encoding: 'auto'
     tokenPattern: 'rm'
+    writeBOM: true
+    escapeType: 'none'
+    actionOnMissing: 'warn'
+    keepToken: false
+    actionOnNoFiles: 'continue'
+    enableTransforms: false
+    enableRecursion: false
+    useLegacyPattern: false
+    enableTelemetry: true
+
+- task: replacetokens@3
+  displayName: 'Replace tokens in mhc-aks.yaml'
+  inputs:
+    targetFiles: 'mhc-aks.yaml'
+    escapeType: none
+    tokenPrefix: '__'
+    tokenSuffix: '__'
 
 - task: DockerCompose@0
-  displayName: 'Build and Push Docker Image'
+  displayName: 'Run services'
+  inputs:
+    containerregistrytype: 'Azure Container Registry'
+    azureSubscription: '$(AZURE_SUBSCRIPTION)'
+    azureContainerRegistry: '{"loginServer":"$(ACR_LOGIN_SERVER)", "id" : "$(ACR_RESOURCE_ID)"}'
+    dockerComposeFile: 'docker-compose.ci.build.yml'
+    action: 'Run services'
+    detached: false
+
+- task: DockerCompose@0
+  displayName: 'Build services'
   inputs:
     containerregistrytype: 'Azure Container Registry'
     azureSubscription: '$(AZURE_SUBSCRIPTION)'
     azureContainerRegistry: '{"loginServer":"$(ACR_LOGIN_SERVER)", "id" : "$(ACR_RESOURCE_ID)"}'
     dockerComposeFile: 'docker-compose.yml'
+    dockerComposeFileArgs: 'DOCKER_BUILD_SOURCE='
     action: 'Build services'
     additionalImageTags: '$(Build.BuildId)'
+
+- task: DockerCompose@0
+  displayName: 'Push services'
+  inputs:
+    containerregistrytype: 'Azure Container Registry'
+    azureSubscription: '$(AZURE_SUBSCRIPTION)'
+    azureContainerRegistry: '{"loginServer":"$(ACR_LOGIN_SERVER)", "id" : "$(ACR_RESOURCE_ID)"}'
+    dockerComposeFile: 'docker-compose.yml'
+    dockerComposeFileArgs: 'DOCKER_BUILD_SOURCE='
+    action: 'Push services'
+    additionalImageTags: '$(Build.BuildId)'
+
+- task: DockerCompose@0
+  displayName: 'Lock services'
+  inputs:
+    containerregistrytype: 'Azure Container Registry'
+    azureSubscription: '$(AZURE_SUBSCRIPTION)'
+    azureContainerRegistry: '{"loginServer":"$(ACR_LOGIN_SERVER)", "id" : "$(ACR_RESOURCE_ID)"}'
+    dockerComposeFile: 'docker-compose.yml'
+    dockerComposeFileArgs: 'DOCKER_BUILD_SOURCE='
+    action: 'Lock services'
+    outputDockerComposeFile: '$(Build.StagingDirectory)/docker-compose.yml'
+
+- task: CopyFiles@2
+  displayName: 'Copy Files'
+  inputs:
+    Contents: |
+      **/mhc-aks.yaml
+      **/*.dacpac
+    TargetFolder: '$(Build.ArtifactStagingDirectory)'
 
 - task: PublishBuildArtifacts@1
   displayName: 'Publish Artifact'
   inputs:
     ArtifactName: deploy
+
 ```
 
 ## **4. Preparing Docker Files**
